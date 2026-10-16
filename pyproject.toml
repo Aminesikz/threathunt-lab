@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "threathunt-lab"
+version = "0.1.0"
+description = "A reproducible Python lab for threat hunting and detection engineering on synthetic security telemetry."
+readme = "README.md"
+requires-python = ">=3.11"
+# No runtime dependencies: Milestone 1 uses only the standard library.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Import the package directly from src/ so tests do not depend on the editable
+# install's .pth file (see "Troubleshooting" in README.md).
+pythonpath = ["src"]
+addopts = "-ra --strict-markers"

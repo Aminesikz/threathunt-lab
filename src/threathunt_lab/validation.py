@@ -1,12 +1,7 @@
-"""Explicit validation of event records and evaluation labels.
+"""Validation of events and labels.
 
-Validators never raise on bad data. They return a list of
-:class:`ValidationIssue` so that every problem in a file is reported at once,
-which is more useful than fixing one error per run. Raising is left to the
-loader (see ``loader.py``).
-
-Event content is treated as untrusted, inert text: values are type-checked and
-compared, never executed or interpreted.
+The validators return a list of issues instead of raising, so every problem in
+a file is reported in one run. The loader raises if the list isn't empty.
 """
 
 from __future__ import annotations
@@ -29,10 +24,8 @@ from threathunt_lab.schema import (
     get_field,
 )
 
-# UTC only, explicit "Z" suffix, optional fractional seconds (up to microseconds).
-# [0-9] is used instead of \d, which would also match non-ASCII digits.
-# Hours are limited to 00-23: newer Python versions accept "24:00:00" as the
-# next day's midnight, but that form is ambiguous and rejected here.
+# UTC with a "Z" suffix, optional fractions of a second. [0-9] instead of \d
+# because \d also matches non-ASCII digits. Hour 24 is rejected.
 _TIMESTAMP_PATTERN = re.compile(
     r"[0-9]{4}-[0-9]{2}-[0-9]{2}T([01][0-9]|2[0-3]):[0-9]{2}:[0-9]{2}(\.[0-9]{1,6})?Z"
 )

@@ -147,8 +147,8 @@ malicious.
   Scenario `S16` is `suspicious_looking` and `alert`, but a name-based detection
   is expected to miss it.
 - `expected_outcome` only makes sense relative to `detection_objective`. The
-  current objective is **provisional** and will be revisited when the detection
-  is designed in Milestone 3. Labels may change at that point.
+  objective was confirmed in Milestone 3 (detection D001). No expected outcome
+  was changed.
 
 ## Why labels are stored in a separate file
 

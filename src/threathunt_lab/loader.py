@@ -1,15 +1,7 @@
-"""Load and validate the synthetic dataset from JSON files.
+"""Load and validate the dataset files.
 
-Dataset files are treated as untrusted input:
-
-* files larger than ``MAX_FILE_BYTES`` are refused;
-* content must be valid UTF-8 JSON;
-* duplicate keys in a JSON object are rejected, because ``json`` would
-  otherwise silently keep only the last value;
-* ``NaN`` and ``Infinity`` are rejected (they are not valid JSON).
-
-Any problem raises :class:`DatasetError`. Schema problems raise the subclass
-:class:`DatasetValidationError`, which lists every issue found.
+The files are treated as untrusted: size limit, UTF-8 only, no duplicate JSON
+keys (json would silently keep the last one) and no NaN/Infinity.
 """
 
 from __future__ import annotations

@@ -1,0 +1,54 @@
+title: PowerShell Encoded Command or Download and Execute
+id: 9a8f27f1-742d-4140-b078-abeb785d88dd
+status: experimental
+description: |
+  Detects PowerShell started with an encoded command (-EncodedCommand or one of
+  its short forms), or with a command line that downloads content and runs it
+  in memory with Invoke-Expression. Built from hunt H001.
+references:
+  - https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pwsh
+  - https://github.com/Aminesikz/threathunt-lab/blob/main/hunts/H001-powershell-process-creation.md
+author: Aminesikz
+date: 2026-10-19
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.stealth
+  - attack.t1027.010
+  - attack.command-and-control
+  - attack.t1105
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    - Image|endswith:
+        - '\powershell.exe'
+        - '\pwsh.exe'
+    - OriginalFileName:
+        - 'PowerShell.EXE'
+        - 'pwsh.dll'
+  selection_encoded:
+    # Spaces around the flag so text like "q4-encryption" doesn't match.
+    CommandLine|windash|contains:
+      - ' -e '
+      - ' -ec '
+      - ' -en '
+      - ' -enc '
+      - ' -enco'
+  selection_download:
+    CommandLine|contains:
+      - 'DownloadString'
+      - 'DownloadData'
+      - 'Invoke-WebRequest'
+      - 'Invoke-RestMethod'
+  selection_invoke:
+    CommandLine|contains:
+      - 'IEX'
+      - 'Invoke-Expression'
+  condition: selection_img and (selection_encoded or (selection_download and selection_invoke))
+falsepositives:
+  - Management and deployment tools that pass scripts with -EncodedCommand
+  - Administrators or developers testing encoded commands
+  - Installers that download and run setup scripts
+level: medium

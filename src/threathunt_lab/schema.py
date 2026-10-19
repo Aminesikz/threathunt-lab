@@ -1,11 +1,7 @@
-"""Field definitions for process-creation events and evaluation labels.
+"""Field definitions for events and labels. See docs/event_schema.md.
 
-Events are stored as nested JSON documents, the way Elasticsearch stores ECS
-data (``{"process": {"parent": {"name": ...}}}``). Fields are referred to by
-their dotted ECS path (``process.parent.name``) and resolved with
-:func:`get_field`.
-
-See ``docs/event_schema.md`` for the human-readable description.
+Events are nested JSON, and fields are looked up by dotted path, e.g.
+get_field(event, "process.parent.name").
 """
 
 from __future__ import annotations

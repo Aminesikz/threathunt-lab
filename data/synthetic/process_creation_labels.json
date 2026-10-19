@@ -2,7 +2,7 @@
   "schema_version": "1",
   "detection_objective": {
     "id": "powershell-hidden-or-remote-code",
-    "description": "Provisional objective (to be refined in Milestone 3): identify PowerShell process creations whose command line hides the code being run (encoded commands) or downloads and executes remote content in memory."
+    "description": "Identify PowerShell process creations whose command line hides the code being run (encoded commands) or downloads and executes remote content in memory. Implemented by detection D001."
   },
   "labels": [
     {

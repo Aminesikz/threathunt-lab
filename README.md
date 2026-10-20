@@ -69,7 +69,6 @@ Run the tests:
 - [x] 2. Threat hunt H001 ([write-up](hunts/H001-powershell-process-creation.md))
 - [x] 3. Detection D001 ([write-up](detections/D001-powershell-encoded-or-download.md))
 - [x] 4. Detection testing and evaluation ([results](reports/evaluation.md))
-- [x] 5. Final clean-up
 
 ## Results
 

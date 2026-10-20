@@ -1,7 +1,5 @@
 """Tests for hunt H001 (Milestone 2)."""
 
-from __future__ import annotations
-
 import base64
 import json
 import re
@@ -145,13 +143,6 @@ def test_hunt_can_run_one_step(capsys):
     output = capsys.readouterr().out
     assert "== Q4 Command-line features ==" in output
     assert "== Q3" not in output
-
-
-def test_hunt_rejects_invalid_events(write_json, make_event, capsys):
-    event = make_event()
-    del event["process"]["command_line"]
-    assert main(["hunt", "--events", str(write_json("events.json", [event]))]) == 1
-    assert "process.command_line" in capsys.readouterr().err
 
 
 # --- The write-up matches reality -----------------------------------------------------

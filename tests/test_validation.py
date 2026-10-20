@@ -1,7 +1,5 @@
 """Tests for loading and validating the dataset (Milestone 1)."""
 
-from __future__ import annotations
-
 import pytest
 
 from threathunt_lab.__main__ import main

@@ -1,16 +1,11 @@
 """Hunt H001: suspicious PowerShell process creation.
 
-Run with: python -m threathunt_lab hunt
+Each step (Q1 to Q7) prints tables for the analyst to read. The analyst, not
+the code, decides what looks suspicious (see hunts/H001-...md).
 
-Each step (Q1 to Q7) prints tables for an analyst to read. The steps match the
-Elastic queries in hunts/H001-powershell-process-creation.md. The steps don't
-decide what is malicious; the analyst does, in the write-up.
-
-The hunt only receives the events. It never sees the evaluation labels.
-Command lines are treated as text: they are searched and decoded, never run.
+The hunt only gets the events, never the labels. Command lines are only read
+as text, never run.
 """
-
-from __future__ import annotations
 
 import base64
 import binascii
@@ -23,9 +18,8 @@ from threathunt_lab.validation import parse_utc_timestamp
 
 POWERSHELL_NAMES = {"powershell.exe", "pwsh.exe", "powershell_ise.exe"}
 
-# Command-line features to look for: case-insensitive substrings, like a KQL
-# wildcard search (*-enc*). Deliberately broad, so they also match some
-# harmless command lines; the write-up discusses this.
+# Words to look for in command lines (ignoring case), like a KQL search for
+# *-enc*. Deliberately broad, so some harmless commands match too.
 FEATURES = {
     "encoded_command": ["-enc"],
     "hidden_window": ["hidden"],
@@ -41,9 +35,8 @@ FEATURES = {
     "invoke_expression": ["iex", "invoke-expression"],
 }
 
-# The exact values used in the naive KQL query in step Q4 of the write-up.
-# KQL matches case-sensitively, so Q4 copies that behaviour to show what the
-# query would miss.
+# The values in the simple KQL query in step Q4. KQL is case-sensitive, so Q4
+# copies that to show what the query would miss.
 KQL_NAMES = ["powershell.exe", "pwsh.exe", "POWERSHELL.EXE"]
 KQL_PATTERNS = ["-enc", "-Enc", "-ENC", "-EncodedCommand"]
 
@@ -80,11 +73,7 @@ def features_text(event: dict) -> str:
 
 
 def count_rarest_first(values) -> list[tuple]:
-    """Count each value and return (value, count) pairs, rarest first.
-
-    Hunters call this "stacking": rare values are often the interesting ones.
-    Ties are sorted by value, so the output order never changes.
-    """
+    """Count each value, rarest first ("stacking"). Ties are sorted by value."""
     counts = Counter(values)
     return sorted(counts.items(), key=lambda item: (item[1], item[0]))
 
@@ -234,7 +223,7 @@ def q4_command_line_features(events: list[dict]) -> None:
         if kql_match or any_case_match:
             rows.append([text(e, "event.id"), "yes" if kql_match else "NO", "yes" if any_case_match else "NO"])
     print_table(
-        "Encoded-command search: case-sensitive KQL (q4_encoded_command_naive.kql) vs case-insensitive",
+        "Encoded-command search: case-sensitive KQL query vs case-insensitive",
         ["event.id", "KQL match", "case-insensitive match"],
         rows,
     )

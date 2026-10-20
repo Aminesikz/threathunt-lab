@@ -1,7 +1,5 @@
 """Shared test fixtures. pytest gives these to any test that names them as a parameter."""
 
-from __future__ import annotations
-
 import copy
 import json
 from pathlib import Path

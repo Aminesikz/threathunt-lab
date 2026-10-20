@@ -1,12 +1,11 @@
-"""Command-line entry point: ``python -m threathunt_lab {validate,hunt}``."""
-
-from __future__ import annotations
+"""Command-line entry point: ``python -m threathunt_lab {validate,hunt,evaluate}``."""
 
 import argparse
 import sys
 from collections import Counter
 from pathlib import Path
 
+from threathunt_lab.evaluate import evaluate, write_reports
 from threathunt_lab.hunt import STEPS, run_hunt
 from threathunt_lab.loader import (
     DEFAULT_EVENTS_PATH,
@@ -37,6 +36,13 @@ def build_parser() -> argparse.ArgumentParser:
         action="append",
         help="run only this step; repeat to run several (default: all steps)",
     )
+
+    evaluate_cmd = subcommands.add_parser(
+        "evaluate", help="run detection D001 and compare the results with the labels"
+    )
+    evaluate_cmd.add_argument("--events", type=Path, default=DEFAULT_EVENTS_PATH)
+    evaluate_cmd.add_argument("--labels", type=Path, default=DEFAULT_LABELS_PATH)
+    evaluate_cmd.add_argument("--out", type=Path, default=Path("reports"))
     return parser
 
 
@@ -70,12 +76,31 @@ def run_hunt_command(events_path: Path, step_ids: list[str] | None) -> int:
     return 0
 
 
+def run_evaluate(events_path: Path, labels_path: Path, out_dir: Path) -> int:
+    try:
+        dataset = load_dataset(events_path, labels_path)
+    except DatasetError as exc:
+        print(f"Evaluation FAILED: could not load the dataset\n{exc}", file=sys.stderr)
+        return 1
+
+    report = evaluate(dataset)
+    write_reports(report, out_dir)
+    counts = report["counts"]
+    print(f"Detection D001 on {report['events']} events")
+    print(f"  TP {counts['TP']}  FP {counts['FP']}  TN {counts['TN']}  FN {counts['FN']}")
+    print(f"  precision {report['precision']}  recall {report['recall']}")
+    print(f"  reports written to {out_dir}/evaluation.json and {out_dir}/evaluation.md")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "validate":
         return run_validate(args.events, args.labels)
     if args.command == "hunt":
         return run_hunt_command(args.events, args.step)
+    if args.command == "evaluate":
+        return run_evaluate(args.events, args.labels, args.out)
     return 2  # unreachable: argparse enforces a known subcommand
 
 

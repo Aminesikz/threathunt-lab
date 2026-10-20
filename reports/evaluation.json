@@ -1,0 +1,160 @@
+{
+  "detection": "D001",
+  "rule": "detections/sigma/powershell_encoded_or_download_cradle.yml",
+  "objective": "powershell-hidden-or-remote-code",
+  "events": 16,
+  "counts": {
+    "TP": 5,
+    "FP": 0,
+    "TN": 10,
+    "FN": 1
+  },
+  "precision": 1.0,
+  "recall": 0.833,
+  "results": [
+    {
+      "event_id": "thl-evt-0001",
+      "scenario_id": "S01-notepad-from-explorer",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "User opens a text file from Explorer. Routine, non-PowerShell activity."
+    },
+    {
+      "event_id": "thl-evt-0002",
+      "scenario_id": "S02-browser-from-explorer",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "User starts the browser. Routine, non-PowerShell activity."
+    },
+    {
+      "event_id": "thl-evt-0003",
+      "scenario_id": "S03-service-host-start",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Service Control Manager starts a service host. Expected operating system behaviour."
+    },
+    {
+      "event_id": "thl-evt-0004",
+      "scenario_id": "S04-interactive-powershell",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Engineer opens an interactive PowerShell window with no arguments. PowerShell use alone is outside the detection objective."
+    },
+    {
+      "event_id": "thl-evt-0005",
+      "scenario_id": "S05-editor-integrated-terminal",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Code editor starts PowerShell for its integrated terminal. Common developer workflow."
+    },
+    {
+      "event_id": "thl-evt-0006",
+      "scenario_id": "S06-scheduled-report-script",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Scheduled task runs a named, on-disk reporting script. The script content is visible on disk, so this is outside the objective."
+    },
+    {
+      "event_id": "thl-evt-0007",
+      "scenario_id": "S07-network-troubleshooting",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "User checks network configuration from a command prompt. Non-PowerShell activity."
+    },
+    {
+      "event_id": "thl-evt-0008",
+      "scenario_id": "S08-substring-lookalike",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Edge case: the file name 'q4-encryption' contains the substring '-enc'. Tests that matching on a parameter name is not done with a naive substring search."
+    },
+    {
+      "event_id": "thl-evt-0009",
+      "scenario_id": "S09-office-spawns-encoded-powershell",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Word document spawns hidden PowerShell with an encoded command. The encoded text decodes to an inert Write-Output string."
+    },
+    {
+      "event_id": "thl-evt-0010",
+      "scenario_id": "S10-download-and-execute-pattern",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Command line matches a download-and-execute-in-memory pattern. 198.51.100.23 is an RFC 5737 documentation address; the command was never run."
+    },
+    {
+      "event_id": "thl-evt-0011",
+      "scenario_id": "S11-management-agent-encoded-command",
+      "classification": "benign",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Fictional configuration-management agent passes a script via -EncodedCommand, which some legitimate tools do. It is in scope for the objective, so an alert is expected; it represents a known benign trigger for later false-positive analysis."
+    },
+    {
+      "event_id": "thl-evt-0012",
+      "scenario_id": "S12-case-and-abbreviation-variant",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Edge case: upper-case process name and mixed-case abbreviated parameter (-eNc). Tests case-insensitive matching and parameter abbreviation."
+    },
+    {
+      "event_id": "thl-evt-0013",
+      "scenario_id": "S13-powershell-7-encoded-command",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Edge case: PowerShell 7 (pwsh.exe) rather than Windows PowerShell, with an encoded command launched from a spreadsheet application."
+    },
+    {
+      "event_id": "thl-evt-0014",
+      "scenario_id": "S14-powershell-ise",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "User opens the PowerShell ISE editor. Outside the objective."
+    },
+    {
+      "event_id": "thl-evt-0015",
+      "scenario_id": "S15-hidden-window-scheduled-task",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "Edge case: a hidden window on its own is common in legitimate automation. The script is a named on-disk file, so this is outside the objective."
+    },
+    {
+      "event_id": "thl-evt-0016",
+      "scenario_id": "S16-renamed-powershell-binary",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "no_alert",
+      "result": "FN",
+      "rationale": "Edge case: scenario represents a renamed copy of powershell.exe. The dataset has no PE metadata (e.g. process.pe.original_file_name), so a detection keyed on process name is expected to miss it. Kept as a deliberate known false-negative case."
+    }
+  ]
+}

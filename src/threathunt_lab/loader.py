@@ -15,6 +15,8 @@ MAX_FILE_BYTES = 10 * 1024 * 1024  # 10 MB, far more than the sample data needs
 
 DEFAULT_EVENTS_PATH = Path("data/synthetic/process_creation_events.json")
 DEFAULT_LABELS_PATH = Path("data/synthetic/process_creation_labels.json")
+PHP_EVENTS_PATH = Path("data/synthetic/php_web_events.json")
+PHP_LABELS_PATH = Path("data/synthetic/php_web_labels.json")
 
 
 class DatasetError(Exception):

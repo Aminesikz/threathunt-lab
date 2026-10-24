@@ -4,6 +4,9 @@
 |---|---|
 | `synthetic/process_creation_events.json` | 16 synthetic Windows process-start events |
 | `synthetic/process_creation_labels.json` | The expected result for each event (kept separate) |
+| `synthetic/php_web_events.json` | 13 synthetic Linux process-start events from PHP web servers (PHP2Shell case study) |
+| `synthetic/php_web_labels.json` | The expected result for each of those events |
+| `synthetic/php_inventory.json` | 7 made-up Linux web servers and their PHP versions, for the `php-versions` check |
 
 The format is described in [`docs/event_schema.md`](../docs/event_schema.md).
 
@@ -33,6 +36,21 @@ The format is described in [`docs/event_schema.md`](../docs/event_schema.md).
 | S16 | suspicious_looking | alert | Renamed PowerShell (a known gap) |
 
 Each event's full reason is in the labels file.
+
+### PHP2Shell scenarios (Linux)
+
+| Scenario | Classification | Expected | What it tests |
+|---|---|---|---|
+| P01–P03 | benign | no_alert | Services starting, a cron PHP script |
+| P04 | benign | no_alert | PHP command-line script runs `git` (not a web server) |
+| P05 | benign | no_alert | PHP's `mail()` running sendmail |
+| P06 | benign | alert | Image resizing through a shell (a known innocent alert) |
+| P07, P09–P11 | suspicious_looking | alert | Web server runs `id`/`uname`, `wget`, `curl` |
+| P08 | suspicious_looking | no_alert | `uname` started by the shell, not by PHP |
+| P12 | suspicious_looking | alert | Download hidden behind the mail command |
+| P13 | suspicious_looking | alert | No parent path recorded (a known gap) |
+
+The download address `198.51.100.77` is a documentation address (RFC 5737).
 
 ## Limitations
 

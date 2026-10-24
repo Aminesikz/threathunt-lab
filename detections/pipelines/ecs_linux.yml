@@ -1,0 +1,14 @@
+# sigma-cli has no ECS pipeline for Linux, so this maps the Sigma fields to ECS.
+name: ECS fields for Linux process creation (ThreatHunt Lab)
+priority: 20
+transformations:
+  - id: ecs_linux_process_creation
+    type: field_name_mapping
+    mapping:
+      Image: process.executable
+      ParentImage: process.parent.executable
+      CommandLine: process.command_line
+    rule_conditions:
+      - type: logsource
+        category: process_creation
+        product: linux

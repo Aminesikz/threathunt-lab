@@ -289,12 +289,12 @@ STEPS = {
 }
 
 
-def run_hunt(events: list[dict], step_ids: list[str] | None = None) -> None:
-    """Print the chosen steps (all of them by default), in Q1 to Q7 order."""
-    selected = [step_id for step_id in STEPS if step_ids is None or step_id in step_ids]
+def run_hunt(events: list[dict], step_ids: list[str] | None = None, steps: dict = STEPS) -> None:
+    """Print the chosen steps (all of them by default), in order."""
+    selected = [step_id for step_id in steps if step_ids is None or step_id in step_ids]
     for number, step_id in enumerate(selected):
         if number > 0:
             print("\n")
-        title, step = STEPS[step_id]
+        title, step = steps[step_id]
         print(f"== {step_id} {title} ==")
         step(events)

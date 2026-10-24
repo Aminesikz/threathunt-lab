@@ -2,7 +2,9 @@
 
 The dataset has two files:
 
-1. **Events**: Windows process-start events, shaped like real telemetry.
+1. **Events**: process-start events, shaped like real telemetry. The PowerShell
+   data is Windows, the PHP2Shell data (`php_web_events.json`) is Linux.
+   Both use the same fields and rules.
 2. **Labels**: the expected answers for testing, kept in a separate file.
 
 The rules below are checked by [`validation.py`](../src/threathunt_lab/validation.py).
@@ -69,6 +71,13 @@ Real process events usually also have `process.pid`, `process.entity_id`,
 `process.pe.original_file_name`, `process.hash.*` and more. They're left out
 to keep the data small. Because `process.pe.original_file_name` is missing, a
 renamed PowerShell can't be recognised (scenario S16).
+
+### Extra fields in the Linux data
+
+| Field | Notes |
+|---|---|
+| `host.os.type` | `linux` |
+| `process.parent.executable` | The parent's full path. Detection D002 needs it. Left out of `php-evt-0013` on purpose (scenario P13) |
 
 ## Labels
 

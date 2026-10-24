@@ -1,0 +1,56 @@
+title: PHP Web Server Starts a Shell or Tool
+id: f1886709-cc57-4ac5-86c1-c82344f77ccd
+status: experimental
+description: |
+  Detects a PHP web server process (PHP-FPM, php-cgi, Apache with mod_php,
+  FrankenPHP, LiteSpeed) starting a shell or a discovery/download tool on
+  Linux, as might follow PHP2Shell exploitation. Built from hunt H002.
+references:
+  - https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w
+  - https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp
+  - https://github.com/Aminesikz/threathunt-lab/blob/main/hunts/H002-php-web-server-children.md
+author: Aminesikz
+date: 2026-10-24
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.execution
+  - attack.t1059.004
+  - attack.discovery
+  - attack.t1033
+  - attack.t1082
+  - attack.command-and-control
+  - attack.t1105
+logsource:
+  category: process_creation
+  product: linux
+detection:
+  selection_parent:
+    - ParentImage|endswith:
+        - '/apache2'
+        - '/httpd'
+        - '/frankenphp'
+        - '/lsphp'
+    # contains, because PHP-FPM's path includes its version (php-fpm8.3)
+    - ParentImage|contains:
+        - '/php-fpm'
+        - '/php-cgi'
+  selection_child:
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '/id'
+      - '/uname'
+      - '/whoami'
+      - '/hostname'
+      - '/wget'
+      - '/curl'
+  # PHP's mail() function. Exact match, so a longer command still alerts.
+  filter_mail:
+    CommandLine: 'sh -c /usr/sbin/sendmail -t -i'
+  condition: selection_parent and selection_child and not filter_mail
+falsepositives:
+  - PHP apps that run programs through a shell, like ImageMagick for thumbnails
+  - Admin panels or plugins that run system commands
+level: high

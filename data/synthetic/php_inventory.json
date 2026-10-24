@@ -1,0 +1,9 @@
+[
+  {"host": "web-shop-01", "php_version": "8.3.30", "sapi": "apache2-mod_php", "internet_facing": true},
+  {"host": "web-blog-01", "php_version": "8.4.27", "sapi": "php-fpm", "internet_facing": true},
+  {"host": "web-api-01", "php_version": "8.2.20", "sapi": "php-fpm", "internet_facing": true},
+  {"host": "web-legacy-01", "php_version": "7.4.33", "sapi": "apache2-mod_php", "internet_facing": true},
+  {"host": "web-new-01", "php_version": "8.5.12", "sapi": "frankenphp", "internet_facing": true},
+  {"host": "web-intra-01", "php_version": "8.5.10", "sapi": "php-fpm", "internet_facing": false},
+  {"host": "web-wiki-01", "php_version": "8.3.36", "sapi": "php-fpm", "internet_facing": false}
+]

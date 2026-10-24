@@ -1,4 +1,4 @@
-"""Command-line entry point: ``python -m threathunt_lab {validate,hunt,evaluate}``."""
+"""Command-line entry point: ``python -m threathunt_lab {validate,hunt,evaluate,php-versions}``."""
 
 import argparse
 import sys
@@ -6,14 +6,25 @@ from collections import Counter
 from pathlib import Path
 
 from threathunt_lab.evaluate import evaluate, write_reports
+from threathunt_lab import hunt_php
 from threathunt_lab.hunt import STEPS, run_hunt
 from threathunt_lab.loader import (
     DEFAULT_EVENTS_PATH,
     DEFAULT_LABELS_PATH,
+    PHP_EVENTS_PATH,
     DatasetError,
     load_dataset,
     load_events,
 )
+from threathunt_lab.php_versions import check_inventory, load_inventory, print_results
+
+DEFAULT_INVENTORY_PATH = Path("data/synthetic/php_inventory.json")
+
+# Each hunt: its steps and its default events file.
+HUNTS = {
+    "H001": (STEPS, DEFAULT_EVENTS_PATH),
+    "H002": (hunt_php.STEPS, PHP_EVENTS_PATH),
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -26,15 +37,13 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument("--events", type=Path, default=DEFAULT_EVENTS_PATH)
     validate.add_argument("--labels", type=Path, default=DEFAULT_LABELS_PATH)
 
-    hunt = subcommands.add_parser(
-        "hunt", help="run hunt H001 (PowerShell process creation) over the events"
-    )
-    hunt.add_argument("--events", type=Path, default=DEFAULT_EVENTS_PATH)
+    hunt = subcommands.add_parser("hunt", help="run a hunt over the events")
+    hunt.add_argument("--hunt", choices=list(HUNTS), default="H001", help="H001 PowerShell (default), H002 PHP")
+    hunt.add_argument("--events", type=Path, help="default: the hunt's own events file")
     hunt.add_argument(
         "--step",
-        choices=list(STEPS),
         action="append",
-        help="run only this step; repeat to run several (default: all steps)",
+        help="run only this step, e.g. Q2; repeat to run several (default: all steps)",
     )
 
     evaluate_cmd = subcommands.add_parser(
@@ -43,6 +52,11 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate_cmd.add_argument("--events", type=Path, default=DEFAULT_EVENTS_PATH)
     evaluate_cmd.add_argument("--labels", type=Path, default=DEFAULT_LABELS_PATH)
     evaluate_cmd.add_argument("--out", type=Path, default=Path("reports"))
+
+    php_versions = subcommands.add_parser(
+        "php-versions", help="check a server list for PHP versions affected by PHP2Shell"
+    )
+    php_versions.add_argument("--inventory", type=Path, default=DEFAULT_INVENTORY_PATH)
     return parser
 
 
@@ -65,14 +79,20 @@ def run_validate(events_path: Path, labels_path: Path) -> int:
     return 0
 
 
-def run_hunt_command(events_path: Path, step_ids: list[str] | None) -> int:
+def run_hunt_command(hunt_id: str, events_path: Path | None, step_ids: list[str] | None) -> int:
+    steps, default_events = HUNTS[hunt_id]
+    unknown = sorted(set(step_ids or []) - set(steps))
+    if unknown:
+        print(f"Unknown step(s) for {hunt_id}: {', '.join(unknown)}. Choose from {', '.join(steps)}", file=sys.stderr)
+        return 2
+
     # Events only: hunting must not see the evaluation labels.
     try:
-        events = load_events(events_path)
+        events = load_events(events_path or default_events)
     except DatasetError as exc:
         print(f"Hunt FAILED: could not load events\n{exc}", file=sys.stderr)
         return 1
-    run_hunt(events, step_ids)
+    run_hunt(events, step_ids, steps)
     return 0
 
 
@@ -93,14 +113,26 @@ def run_evaluate(events_path: Path, labels_path: Path, out_dir: Path) -> int:
     return 0
 
 
+def run_php_versions(inventory_path: Path) -> int:
+    try:
+        servers = load_inventory(inventory_path)
+    except DatasetError as exc:
+        print(f"Version check FAILED\n{exc}", file=sys.stderr)
+        return 1
+    print_results(check_inventory(servers))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "validate":
         return run_validate(args.events, args.labels)
     if args.command == "hunt":
-        return run_hunt_command(args.events, args.step)
+        return run_hunt_command(args.hunt, args.events, args.step)
     if args.command == "evaluate":
         return run_evaluate(args.events, args.labels, args.out)
+    if args.command == "php-versions":
+        return run_php_versions(args.inventory)
     return 2  # unreachable: argparse enforces a known subcommand
 
 

@@ -13,6 +13,7 @@ from threathunt_lab.loader import PHP_EVENTS_PATH
 
 ROOT = Path(__file__).resolve().parents[1]
 HUNT_DOC = ROOT / "hunts" / "H002-php-web-server-children.md"
+WALKTHROUGH = ROOT / "docs" / "php2shell-investigation.md"
 
 
 def child_of(make_event, parent_name, command_line="sh -c id"):
@@ -55,10 +56,11 @@ def test_hunt_rejects_unknown_step(capsys):
     assert "Unknown step(s) for H002: Q7" in capsys.readouterr().err
 
 
-def test_write_up_quotes_real_hunt_output(capsys):
+@pytest.mark.parametrize("doc", [HUNT_DOC, WALKTHROUGH])
+def test_write_up_quotes_real_hunt_output(capsys, doc):
     run_hunt(json.loads((ROOT / PHP_EVENTS_PATH).read_text(encoding="utf-8")), steps=hunt_php.STEPS)
     output = capsys.readouterr().out
-    blocks = re.findall(r"```text\n(.*?)\n```", HUNT_DOC.read_text(encoding="utf-8"), re.DOTALL)
+    blocks = re.findall(r"```text\n(.*?)\n```", doc.read_text(encoding="utf-8"), re.DOTALL)
     assert blocks
     for block in blocks:
         assert block in output, f"not produced by the hunt:\n{block}"

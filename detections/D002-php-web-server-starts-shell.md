@@ -5,6 +5,7 @@
 | **Rule** | [`sigma/php_web_server_starts_shell.yml`](sigma/php_web_server_starts_shell.yml) |
 | **Based on** | Hunt [H002](../hunts/H002-php-web-server-children.md), [PHP2Shell research](../docs/php2shell-research.md) |
 | **Status / level** | experimental / high |
+| **Results** | [`reports/D002-evaluation.md`](../reports/D002-evaluation.md) |
 
 ## What it detects
 
@@ -114,4 +115,17 @@ checks in Python. Tests in
 - the mail exclusion is exact
 - missing fields don't crash it
 
-Running it on all 13 events and comparing with the labels is Milestone 8.
+## Results (Milestone 8)
+
+`python -m threathunt_lab evaluate --detection D002` runs it on the 13 events
+and compares with the labels ([report](../reports/D002-evaluation.md)):
+
+- **No false positives.** PHP mail, cron PHP and the `uname` grandchild didn't alert.
+- **One miss: `php-evt-0013`**, the event without a parent path, as expected.
+- **`php-evt-0006` alerted**: correct for this rule, but it's a legitimate
+  image resize (a "benign true positive").
+- **Optimistic**, like D001: the rule was built from the hunt on these same
+  events.
+
+How an analyst would follow up a D002 alert:
+[investigation walkthrough](../docs/php2shell-investigation.md).

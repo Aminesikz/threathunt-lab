@@ -1,0 +1,133 @@
+{
+  "detection": "D002",
+  "rule": "detections/sigma/php_web_server_starts_shell.yml",
+  "objective": "php-worker-starts-shell-or-tool",
+  "events": 13,
+  "counts": {
+    "TP": 6,
+    "FP": 0,
+    "TN": 6,
+    "FN": 1
+  },
+  "precision": 1.0,
+  "recall": 0.857,
+  "results": [
+    {
+      "event_id": "php-evt-0001",
+      "scenario_id": "P01-fpm-master-start",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "systemd starts the PHP-FPM master process at boot. Normal service start."
+    },
+    {
+      "event_id": "php-evt-0002",
+      "scenario_id": "P02-apache-start",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "systemd starts Apache at boot. Normal service start."
+    },
+    {
+      "event_id": "php-evt-0003",
+      "scenario_id": "P03-php-cli-cron",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "cron runs a PHP command-line script as the deploy user. Not a web request."
+    },
+    {
+      "event_id": "php-evt-0004",
+      "scenario_id": "P04-php-cli-runs-git",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "The PHP command-line script runs git through a shell. The parent is php8.3 (command line), not a web server, so it should not alert."
+    },
+    {
+      "event_id": "php-evt-0005",
+      "scenario_id": "P05-php-mail-sendmail",
+      "classification": "benign",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "PHP's mail() function runs exactly 'sh -c /usr/sbin/sendmail -t -i'. Very common and expected; excluded by the rule."
+    },
+    {
+      "event_id": "php-evt-0006",
+      "scenario_id": "P06-thumbnail-convert",
+      "classification": "benign",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "The shop resizes an uploaded image with ImageMagick through a shell. Legitimate, but a web server starting a shell is exactly what the rule looks for (a known innocent alert)."
+    },
+    {
+      "event_id": "php-evt-0007",
+      "scenario_id": "P07-fpm-shell-recon",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "A PHP-FPM worker runs 'id; uname -a' through a shell as www-data, the discovery commands reported after PHP2Shell attempts."
+    },
+    {
+      "event_id": "php-evt-0008",
+      "scenario_id": "P08-recon-grandchild",
+      "classification": "suspicious_looking",
+      "expected": "no_alert",
+      "actual": "no_alert",
+      "result": "TN",
+      "rationale": "uname started by the shell from P07. Its parent is sh, not PHP, so the rule (which only checks the direct parent) is not expected to alert. The P07 alert already covers this activity."
+    },
+    {
+      "event_id": "php-evt-0009",
+      "scenario_id": "P09-fpm-shell-wget",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "A PHP-FPM worker changes to /tmp and downloads a script with wget from an IP address (documentation range)."
+    },
+    {
+      "event_id": "php-evt-0010",
+      "scenario_id": "P10-fpm-curl-direct",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "A PHP-FPM worker runs curl directly, without a shell, to download a file to a hidden file in /tmp."
+    },
+    {
+      "event_id": "php-evt-0011",
+      "scenario_id": "P11-modphp-shell-recon",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Apache with mod_php (the setup PHP rates highest risk) runs 'uname -a; id' through a shell."
+    },
+    {
+      "event_id": "php-evt-0012",
+      "scenario_id": "P12-sendmail-lookalike",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "alert",
+      "result": "TP",
+      "rationale": "Starts like the normal sendmail command, then downloads a file with curl. Tests that the sendmail exclusion is an exact match and can't be abused."
+    },
+    {
+      "event_id": "php-evt-0013",
+      "scenario_id": "P13-missing-parent-path",
+      "classification": "suspicious_looking",
+      "expected": "alert",
+      "actual": "no_alert",
+      "result": "FN",
+      "rationale": "A PHP-FPM worker runs whoami through a shell, but the log source didn't record process.parent.executable. Expected to be missed by the rule (known gap); the hunt still finds it by parent name."
+    }
+  ]
+}

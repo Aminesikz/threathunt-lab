@@ -5,7 +5,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from threathunt_lab.evaluate import evaluate, write_reports
+from threathunt_lab.evaluate import DETECTIONS, evaluate, write_reports
 from threathunt_lab import hunt_php
 from threathunt_lab.hunt import STEPS, run_hunt
 from threathunt_lab.loader import (
@@ -47,10 +47,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     evaluate_cmd = subcommands.add_parser(
-        "evaluate", help="run detection D001 and compare the results with the labels"
+        "evaluate", help="run a detection and compare the results with the labels"
     )
-    evaluate_cmd.add_argument("--events", type=Path, default=DEFAULT_EVENTS_PATH)
-    evaluate_cmd.add_argument("--labels", type=Path, default=DEFAULT_LABELS_PATH)
+    evaluate_cmd.add_argument("--detection", choices=list(DETECTIONS), default="D001")
+    evaluate_cmd.add_argument("--events", type=Path, help="default: the detection's own events file")
+    evaluate_cmd.add_argument("--labels", type=Path, help="default: the detection's own labels file")
     evaluate_cmd.add_argument("--out", type=Path, default=Path("reports"))
 
     php_versions = subcommands.add_parser(
@@ -96,20 +97,21 @@ def run_hunt_command(hunt_id: str, events_path: Path | None, step_ids: list[str]
     return 0
 
 
-def run_evaluate(events_path: Path, labels_path: Path, out_dir: Path) -> int:
+def run_evaluate(detection_id: str, events_path: Path | None, labels_path: Path | None, out_dir: Path) -> int:
+    defaults = DETECTIONS[detection_id]
     try:
-        dataset = load_dataset(events_path, labels_path)
+        dataset = load_dataset(events_path or defaults["events"], labels_path or defaults["labels"])
     except DatasetError as exc:
         print(f"Evaluation FAILED: could not load the dataset\n{exc}", file=sys.stderr)
         return 1
 
-    report = evaluate(dataset)
-    write_reports(report, out_dir)
+    report = evaluate(dataset, detection_id)
+    json_path, md_path = write_reports(report, out_dir)
     counts = report["counts"]
-    print(f"Detection D001 on {report['events']} events")
+    print(f"Detection {detection_id} on {report['events']} events")
     print(f"  TP {counts['TP']}  FP {counts['FP']}  TN {counts['TN']}  FN {counts['FN']}")
     print(f"  precision {report['precision']}  recall {report['recall']}")
-    print(f"  reports written to {out_dir}/evaluation.json and {out_dir}/evaluation.md")
+    print(f"  reports written to {json_path} and {md_path}")
     return 0
 
 
@@ -130,7 +132,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "hunt":
         return run_hunt_command(args.hunt, args.events, args.step)
     if args.command == "evaluate":
-        return run_evaluate(args.events, args.labels, args.out)
+        return run_evaluate(args.detection, args.events, args.labels, args.out)
     if args.command == "php-versions":
         return run_php_versions(args.inventory)
     return 2  # unreachable: argparse enforces a known subcommand

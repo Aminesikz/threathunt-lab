@@ -5,7 +5,7 @@
 | **Rule** | [`sigma/powershell_encoded_or_download_cradle.yml`](sigma/powershell_encoded_or_download_cradle.yml) |
 | **Based on** | Hunt [H001](../hunts/H001-powershell-process-creation.md) |
 | **Status / level** | experimental / medium |
-| **Results** | [`reports/evaluation.md`](../reports/evaluation.md) |
+| **Results** | [`reports/D001-evaluation.md`](../reports/D001-evaluation.md) |
 
 ## What it detects
 
@@ -117,7 +117,7 @@ Sigma can't run on JSON files by itself, so:
    in Python. A test fails if its patterns ever differ from the Sigma file.
 2. `python -m threathunt_lab evaluate` runs it on each event (it never sees
    the labels), then compares with the labels.
-3. The results are in [`reports/evaluation.md`](../reports/evaluation.md). A
+3. The results are in [`reports/D001-evaluation.md`](../reports/D001-evaluation.md). A
    test reruns the evaluation and fails if the report is out of date.
 
 Extra tests cover things the dataset doesn't have: `-e`, `-ec`, `/enc`, a

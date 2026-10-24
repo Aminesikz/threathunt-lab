@@ -1,4 +1,4 @@
-"""Tests for evaluating detection D001 against the labels (Milestone 4)."""
+"""Tests for evaluating the detections against the labels (Milestones 4 and 8)."""
 
 import json
 from pathlib import Path
@@ -46,12 +46,22 @@ def test_evaluate_counts_a_small_dataset(write_json, make_event, make_labels):
     }
 
 
-def test_evaluate_command_writes_both_reports(tmp_path, capsys):
-    assert main(["evaluate", "--out", str(tmp_path)]) == 0
-    report = json.loads((tmp_path / "evaluation.json").read_text(encoding="utf-8"))
+@pytest.mark.parametrize("detection_id", ["D001", "D002"])
+def test_evaluate_command_writes_both_reports(tmp_path, capsys, detection_id):
+    assert main(["evaluate", "--detection", detection_id, "--out", str(tmp_path)]) == 0
+    report = json.loads((tmp_path / f"{detection_id}-evaluation.json").read_text(encoding="utf-8"))
+    assert report["detection"] == detection_id
     assert sum(report["counts"].values()) == report["events"]
-    assert "# Evaluation: detection D001" in (tmp_path / "evaluation.md").read_text(encoding="utf-8")
+    markdown = (tmp_path / f"{detection_id}-evaluation.md").read_text(encoding="utf-8")
+    assert f"# Evaluation: detection {detection_id}" in markdown
     assert "precision" in capsys.readouterr().out
+
+
+def test_d002_only_misses_the_event_without_a_parent_path(tmp_path):
+    assert main(["evaluate", "--detection", "D002", "--out", str(tmp_path)]) == 0
+    report = json.loads((tmp_path / "D002-evaluation.json").read_text(encoding="utf-8"))
+    wrong = {row["event_id"]: row["result"] for row in report["results"] if row["result"] in ("FP", "FN")}
+    assert wrong == {"php-evt-0013": "FN"}
 
 
 def test_evaluate_command_rejects_malformed_events(write_json, make_event, labels_path, tmp_path, capsys):
@@ -60,13 +70,14 @@ def test_evaluate_command_rejects_malformed_events(write_json, make_event, label
     events_path = write_json("events.json", [event])
     assert main(["evaluate", "--events", str(events_path), "--labels", str(labels_path), "--out", str(tmp_path)]) == 1
     assert "Evaluation FAILED" in capsys.readouterr().err
-    assert not (tmp_path / "evaluation.json").exists()
+    assert not (tmp_path / "D001-evaluation.json").exists()
 
 
-def test_committed_reports_match_a_fresh_run(tmp_path):
+@pytest.mark.parametrize("detection_id", ["D001", "D002"])
+def test_committed_reports_match_a_fresh_run(tmp_path, detection_id):
     # The reports in reports/ must be real output: rerun and compare.
-    assert main(["evaluate", "--out", str(tmp_path)]) == 0
-    for name in ("evaluation.json", "evaluation.md"):
+    assert main(["evaluate", "--detection", detection_id, "--out", str(tmp_path)]) == 0
+    for name in (f"{detection_id}-evaluation.json", f"{detection_id}-evaluation.md"):
         fresh = (tmp_path / name).read_text(encoding="utf-8")
         committed = (REPORTS / name).read_text(encoding="utf-8")
-        assert fresh == committed, f"reports/{name} is out of date: run python -m threathunt_lab evaluate"
+        assert fresh == committed, f"reports/{name} is out of date: run evaluate --detection {detection_id}"
